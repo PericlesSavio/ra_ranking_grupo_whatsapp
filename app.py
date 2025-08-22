@@ -52,7 +52,6 @@ def usuario():
         if ra.get_user_profile(username):
             nome = request.form.get('Nome')
             ano_str = request.form.get('Ano', '').strip()
-            telefone = request.form.get('Telefone')
             dev = request.form.get('Dev') == 'on'
             youtube = request.form.get('Youtube')
 
@@ -61,7 +60,6 @@ def usuario():
                 'Username': username,
                 'Nome': nome,
                 'Ano': ano_str,
-                'Telefone': telefone,
                 'Dev': dev,
                 'Youtube': youtube
             })

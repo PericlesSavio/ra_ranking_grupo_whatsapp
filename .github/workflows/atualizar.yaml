@@ -1,0 +1,16 @@
+name: Atualizar RA Ranking
+
+on:
+  schedule:
+    - cron: "0 5 * * *"  # 05:00 UTC = 02:00 em Brasília
+  workflow_dispatch:       # Para rodar manualmente também
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Acessar página de atualização
+        run: |
+          echo "Chamando a página de atualização..."
+          curl -L "https://ra-ranking-grupo-whatsapp.vercel.app/atualizar_"

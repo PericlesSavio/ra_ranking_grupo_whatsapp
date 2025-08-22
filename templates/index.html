@@ -9,10 +9,10 @@
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-    <div class="container py-5">
+    <div class="container-fluid py-5 px-5">
         {% include 'menu.html' %}
         <h1 class="mb-4 text-center">RA: Ranking de Membros do Grupo</h1>
-        <div class="container py-3">
+        <div class="container-fluid py-3">
             <p class="text-center text-muted">Última atualização: {{ ultima_atualizacao }}</p>
             {% if tabela %}
                 <div class="table-responsive">
