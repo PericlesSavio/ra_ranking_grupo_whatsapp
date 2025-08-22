@@ -1,0 +1,5 @@
+<div class="d-flex justify-content-center flex-wrap gap-2 mb-4">
+    {% for item in menu_items %}
+        <a href="{{ item.rota }}" class="btn btn-outline-primary">{{ item.nome }}</a>
+    {% endfor %}
+</div>

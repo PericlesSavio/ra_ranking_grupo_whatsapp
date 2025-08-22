@@ -1,0 +1,7 @@
+gevent
+gunicorn
+flask
+pandas
+requests
+SQLAlchemy
+psycopg2-binary
