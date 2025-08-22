@@ -13,4 +13,4 @@ jobs:
       - name: Acessar página de atualização
         run: |
           echo "Chamando a página de atualização..."
-          curl -L "https://ra-ranking-grupo-whatsapp.vercel.app/atualizar_"
+          curl -L "https://ra-ranking-grupo-whatsapp.vercel.app/atualizar"
