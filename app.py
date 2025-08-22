@@ -73,7 +73,7 @@ def usuario():
 
     return render_template('usuario.html', sucesso=sucesso, falha=falha, usuario=username)
 
-@app.route('/atualizar_', methods=['GET'])
+@app.route('/atualizar', methods=['GET'])
 def atualizar():
     dados_pessoais = load_json_vercel('dados_pessoais.json')
     membros = []
@@ -88,8 +88,7 @@ def atualizar():
             dados_ra.append(perfil)
 
     save_json_vercel('dados_ra.json', dados_ra)
-    ultima_atualizacao = informar_atualizacao('dados_ra.json')
-    return render_template('atualizar.html', ultima_atualizacao=ultima_atualizacao)
+    return render_template('atualizar.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

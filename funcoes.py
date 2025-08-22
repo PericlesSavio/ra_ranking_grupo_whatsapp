@@ -39,6 +39,9 @@ def converter_url(df):
     df['Avatar'] = df['Avatar'].apply(
         lambda url: f'<img src="{url}" alt="User Pic" style="max-height:50px;">' if pd.notnull(url) else ''
     )
+    df['Usuário'] = df['Usuário'].apply(
+        lambda x: f'<a href="https://retroachievements.org/user/{x}" target="_blank" rel="noopener noreferrer">{x.rsplit("/", 1)[-1]}</a>' if x else ''
+    )
     return df
 
 class RA:
