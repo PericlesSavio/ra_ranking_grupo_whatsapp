@@ -1,4 +1,5 @@
 import pandas as pd
+import time
 from flask import Flask, render_template, request
 from funcoes import RA, informar_atualizacao, load_json_vercel, save_json_vercel, converter_url
 
@@ -81,7 +82,9 @@ def atualizar():
         membros.append(i['Username'])
 
     for i in membros:
+        time.sleep(3)
         perfil = ra.get_user_profile(i)
+        print(perfil)
         if perfil:
             dados_ra.append(perfil)
 
