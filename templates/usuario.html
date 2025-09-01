@@ -18,6 +18,12 @@
         </div>
         {% endif %}
 
+        {% if mudanca_username %}
+        <div class="alert alert-warning" role="alert">
+            O nome de usuario mudou de <a href="https://retroachievements.org/user/{{ usuario }}" target="_blank" rel="noopener noreferrer">{{ usuario }}</a> para <a href="https://retroachievements.org/user/{{ profile }}" target="_blank" rel="noopener noreferrer">{{ profile }}</a>.
+        </div>
+        {% endif %}
+
         {% if falha %}
         <div class="alert alert-danger" role="alert">
             <a href="https://retroachievements.org/user/{{ usuario }}" target="_blank" rel="noopener noreferrer">Usuário</a>
@@ -38,9 +44,12 @@
                 <label class="form-label">Ano</label>
                 <input type="number" name="Ano" class="form-control" step="1" min="0">
             </div>
-            <div class="mb-2 form-check">
-                <input type="checkbox" name="Dev" class="form-check-input" id="devCheck">
-                <label class="form-check-label" for="devCheck">Dev</label>
+            <div class="mb-2">
+                <label class="form-label">Dev</label>
+                <select name="Dev" class="form-select">
+                    <option value="Sim">Sim</option>
+                    <option value="" selected>Não</option>
+                </select>
             </div>
             <div class="mb-2">
                 <label class="form-label">Youtube</label>

@@ -46,19 +46,26 @@ def usuario():
     dados_pessoais = load_json_vercel('dados_pessoais.json')
     sucesso = False
     falha = False
-    username = ''
+    mudanca_username = False
+    username_final = ''
 
     if request.method == 'POST':
         username = request.form.get('Username')
-        if ra.get_user_profile(username):
+        profile = ra.get_user_profile(username)
+        username_final = profile.get('User')
+        
+        if profile.get('User') != username:
+            mudanca_username = True
+        
+        if profile:
             nome = request.form.get('Nome')
             ano_str = request.form.get('Ano', '').strip()
-            dev = request.form.get('Dev') == 'on'
+            dev = request.form.get('Dev')
             youtube = request.form.get('Youtube')
 
             dados_pessoais = [u for u in dados_pessoais if u.get('Username') != username]
             dados_pessoais.append({
-                'Username': username,
+                'Username': profile.get('User'),
                 'Nome': nome,
                 'Ano': ano_str,
                 'Dev': dev,
@@ -70,7 +77,14 @@ def usuario():
         else:
             falha = True
 
-    return render_template('usuario.html', sucesso=sucesso, falha=falha, usuario=username)
+    return render_template(
+        'usuario.html',
+        sucesso=sucesso,
+        falha=falha,
+        usuario=locals().get("username", ""),
+        profile=username_final,
+        mudanca_username=mudanca_username,
+    )
 
 @app.route('/atualizar', methods=['GET'])
 def atualizar():
