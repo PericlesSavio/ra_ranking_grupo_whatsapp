@@ -1,7 +1,7 @@
 import pandas as pd
 import time
 from flask import Flask, render_template, request
-from funcoes import RA, informar_atualizacao, load_json_vercel, save_json_vercel, converter_url
+from funcoes import RA, informar_atualizacao, load_json_vercel, save_json_vercel, converter_url, delete_user_json_vercel
 
 app = Flask(__name__)
 ra = RA()
@@ -26,12 +26,30 @@ def index():
     df_dados_ra = pd.DataFrame(dados_ra)
     df_dados_pessoais = pd.DataFrame(dados_pessoais)
 
-    final = pd.merge(df_dados_ra, df_dados_pessoais, left_on='User', right_on='Username', how='right', suffixes=('_ra', '_personal'))
-    final['Ratio'] = round(final['TotalTruePoints']/final['TotalPoints'], 2)
-    final['Ratio'] = final['Ratio'].fillna(0)
+    final = pd.merge(
+        df_dados_ra,
+        df_dados_pessoais,
+        left_on='User',
+        right_on='Username',
+        how='right',
+        suffixes=('_ra', '_personal')
+    )
 
-    final = final[['Username', 'Nome', 'UserPicURL', 'TotalPoints', 'TotalTruePoints', 'Ratio', 'TotalSoftcorePoints', 'Ano', 'Telefone', 'Dev', 'Youtube']]
-    final.columns = ['Usuário', 'Nome', 'Avatar', 'HardPoints', 'RetroPoints', 'Ratio', 'SoftPoints', 'Ano', 'Telefone', 'Dev', 'Youtube']
+    col_numericas = ['TotalPoints', 'TotalTruePoints', 'TotalSoftcorePoints', 'Ano']
+    for col in col_numericas:
+        if col in final.columns:
+            final[col] = final[col].fillna(0)
+
+    final['Ratio'] = final.apply(
+        lambda row: round(row['TotalTruePoints'] / row['TotalPoints'], 2) if row['TotalPoints'] > 0 else 0,
+        axis=1
+    )
+
+    final = final[['Username', 'Nome', 'UserPicURL', 'TotalPoints', 'TotalTruePoints',
+                   'Ratio', 'TotalSoftcorePoints', 'Ano', 'Telefone', 'Dev', 'Youtube']]
+    final.columns = ['Usuário', 'Nome', 'Avatar', 'HardPoints', 'RetroPoints', 'Ratio',
+                     'SoftPoints', 'Ano', 'Telefone', 'Dev', 'Youtube']
+
     final.insert(0, '#', range(1, len(final) + 1))
     final = final.sort_values(by='HardPoints', ascending=False).reset_index(drop=True)
     final.drop(columns=["Telefone"], inplace=True)
@@ -104,6 +122,26 @@ def atualizar():
 
     save_json_vercel('dados_ra.json', dados_ra)
     return render_template('atualizar.html')
+
+@app.route('/deletar_usuario', methods=['GET', 'POST'])
+def deletar_usuario():
+    sucesso = False
+    falha = False
+
+    if request.method == 'POST':
+        username = request.form.get('Username')
+        try:
+            delete_user_json_vercel(username)
+            sucesso = True
+        except Exception as e:
+            print(f"Erro ao deletar usuário: {e}")
+            falha = True
+
+    return render_template(
+        'deletar_usuario.html',
+        sucesso=sucesso,
+        falha=falha
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)

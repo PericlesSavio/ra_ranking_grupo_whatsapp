@@ -22,6 +22,11 @@ def save_json_vercel(filename, data):
     r = requests.put(url, headers=headers, data=json_bytes)
     return r.json()
 
+def delete_user_json_vercel(usuario):
+    dados_pessoais = load_json_vercel('dados_pessoais.json')
+    dados_pessoais_ajustado = [u for u in dados_pessoais if u["Username"] != usuario]
+    return save_json_vercel('dados_pessoais.json', dados_pessoais_ajustado, usuario)
+
 def informar_atualizacao(filepath):
     url = f'https://tsyfkkmmojo4ck9c.public.blob.vercel-storage.com/{filepath}'
     r = requests.get(url)
